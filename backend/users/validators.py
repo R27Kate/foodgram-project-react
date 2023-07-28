@@ -13,8 +13,7 @@ def validate_username(username):
     if invalid_symbols:
         raise ValidationError(
             f'Сharacters errors {invalid_symbols} \
-                'f' in username: "{username}"'
-            )
+                'f' in username: "{username}"')
 
     return username
 
