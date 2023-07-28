@@ -7,7 +7,9 @@ from .models import CustomUser, Follow
 
 @register(CustomUser)
 class MyUserAdmin(UserAdmin):
-    list_display = ('pk', 'username', 'email', 'first_name', 'last_name', 'is_staff', 'date_joined')
+    list_display = ('pk', 'username', 'email',
+                    'first_name', 'last_name',
+                    'is_staff', 'date_joined')
     search_fields = ('username', 'first_name', 'last_name', 'email')
     list_filter = ('username', 'email', 'first_name', 'last_name')
     empty_value_display = '-empty-'

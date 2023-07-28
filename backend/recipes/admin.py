@@ -2,8 +2,9 @@ from django.contrib.admin import ModelAdmin, register
 
 from .models import (
     Ingredient, IngredientInRecipe, Recipe,
-    Tag, TagInRecipe, Favourite, ShoppingCart
+    TagInRecipe, Favourite, ShoppingCart
 )
+# Tag
 
 
 @register(Ingredient)
@@ -13,9 +14,9 @@ class IngredientAdmin(ModelAdmin):
     search_fields = ('name',)
 
 
-@register(Tag)
-class TagAdmin(ModelAdmin):
-    list_display = ('pk', 'name', 'color', 'slug')
+# @register(Tag)
+# class TagAdmin(ModelAdmin):
+#     list_display = ('pk', 'name', 'color', 'slug')
 
 
 @register(Recipe)

@@ -1,5 +1,7 @@
 '''Миксин заглушек для различных действий,
    связанных с пользователем в пакете djoser.'''
+
+
 class DisableDjoserUserActionsMixin:
     def activation(self, request, *args, **kwargs):
         pass

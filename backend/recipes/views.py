@@ -5,9 +5,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
-from foodgram.common.common_mixins import CreateAndDeleteObjectWithCurrentUserMixin
-from foodgram.common.common_permissions import (IsAuthenticatedOrRaise401,
-                                                IsAuthenticatedOrReadOnlyOrRaise401)
+from foodgram.common.common_mixins import\
+    CreateAndDeleteObjectWithCurrentUserMixin
+from foodgram.common.common_permissions import (
+    IsAuthenticatedOrRaise401,
+    IsAuthenticatedOrReadOnlyOrRaise401)
 from recipes import errors
 from recipes.filters import IngredientSearchFilter, RecipeFilter
 from recipes.models import Ingredient, Tag, Recipe
@@ -68,7 +70,8 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
         recipes = get_recipes_from_shopping_cart(reqeust.user)
         file = RecipeTXTCreator(recipes).create()
         response = HttpResponse(file, content_type='text/plain')
-        response['Content-Disposition'] = f'attachment; filename={RecipeTXTCreator.file_name}'
+        response['Content-Disposition'] = \
+            f'attachment; filename={RecipeTXTCreator.file_name}'
         return response
 
     @action(detail=True, methods=('POST', 'DELETE'), url_path='shopping_cart',
@@ -76,11 +79,13 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
     def process_shopping_cart(self, request, pk=None):
         '''добавляем и удаляем рецепт из списка покупок'''
         if request.method == 'POST':
-            return self.create_with_user(add_recipe_to_shopping_cart,
-                                         errors.RECIPE_IS_ALREADY_ON_SHOPPING_CART)
+            return self.create_with_user(
+                add_recipe_to_shopping_cart,
+                errors.RECIPE_IS_ALREADY_ON_SHOPPING_CART)
         else:
-            return self.delete_with_user(delete_recipe_from_shopping_cart,
-                                         errors.RECIPE_IS_NOT_ON_SHOPPING_CART)
+            return self.delete_with_user(
+                delete_recipe_from_shopping_cart,
+                errors.RECIPE_IS_NOT_ON_SHOPPING_CART)
 
     @action(detail=True, methods=('POST', 'DELETE'), url_path='favorite',
             permission_classes=(IsAuthenticatedOrRaise401,))
@@ -98,7 +103,8 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
         serializer_to_save = self.get_serializer(instance, self.request.data)
         serializer_to_save.is_valid(raise_exception=True)
         created_recipe = serializer_to_save.save(author=self.request.user)
-        recipe_to_return = get_recipes_for_serialization(self.request.user.id).get(id=created_recipe.id)
+        recipe_to_return = get_recipes_for_serialization(self.request.user.id)\
+            .get(id=created_recipe.id)
         serializer_to_return = RecipeSerializer(recipe_to_return)
         return serializer_to_return.data
 

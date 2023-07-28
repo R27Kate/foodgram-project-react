@@ -24,7 +24,6 @@ def get_recipes_for_serialization(user_id):
         'ingredient_list',
         IngredientInRecipe.objects.select_related('ingredient')
     )
-
     author_followers = Prefetch(
         'author__follow',
         Follow.objects.filter(user_id=user_id))
@@ -33,8 +32,7 @@ def get_recipes_for_serialization(user_id):
         .select_related('author') \
         .prefetch_related(favourites, shopping_recipe,
                           ingredient_list, author_followers,
-                          'tags') \
-        .all() \
+                          'tags').all()
 
 
 def add_recipe_to_shopping_cart(recipe, user):

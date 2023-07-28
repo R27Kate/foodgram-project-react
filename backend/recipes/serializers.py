@@ -35,7 +35,7 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    '''Сериализатор для модели Recipe c добавлением 
+    '''Сериализатор для модели Recipe c добавлением
        в избранное и в список покупок'''
     tags = TagSerializer(many=True)
     author = CustomUserSerializer()
@@ -50,8 +50,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ('id', 'tags', 'author', 'ingredients',
                   'image', 'name', 'text', 'cooking_time',
-                  'is_favorited', 'is_in_shopping_cart'
-        )
+                  'is_favorited', 'is_in_shopping_cart',)
 
     @staticmethod
     def get_is_favorited(recipe):
@@ -86,7 +85,7 @@ class SaveRecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ('ingredients', 'tags', 'name',
                   'image', 'text', 'cooking_time')
-    
+
     def validate(self, data):
         validate_tags(self.initial_data.get('tags')),
         validate_ingredients(
@@ -94,9 +93,8 @@ class SaveRecipeSerializer(serializers.ModelSerializer):
         )
         return data
 
-
     def create(self, validated_data):
-        '''создание нового рецепта со связанными 
+        '''создание нового рецепта со связанными
            ингредиентами и тэгами'''
         ingredients_data = validated_data.pop('ingredients')
         tags_data = validated_data.pop('tags')

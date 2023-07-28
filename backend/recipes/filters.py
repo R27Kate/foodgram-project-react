@@ -1,7 +1,8 @@
+from django_filters import ModelMultipleChoiceFilter
 from django_filters import FilterSet, NumberFilter
 from rest_framework.filters import SearchFilter
 
-from recipes.models import Recipe
+from recipes.models import Recipe, Tag
 from recipes.validators import check_int_is_bool
 
 
@@ -11,12 +12,17 @@ class IngredientSearchFilter(SearchFilter):
 
 
 class RecipeFilter(FilterSet):
-    '''Фильтры для избранного и списка покупок
-    по индетификатору пользователя '''
+    '''Фильтры для избранного, списка покупок и тэгов
+       по индетификатору пользователя '''
     is_favorited = NumberFilter(method='get_is_favorited',
                                 validators=(check_int_is_bool,))
     is_in_shopping_cart = NumberFilter(method='get_is_in_shopping_cart',
                                        validators=(check_int_is_bool,))
+    tags = ModelMultipleChoiceFilter(
+        field_name='tags__slug',
+        to_field_name='slug',
+        queryset=Tag.objects.all(),
+    )
 
     class Meta:
         model = Recipe

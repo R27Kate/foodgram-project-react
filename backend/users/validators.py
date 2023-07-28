@@ -11,7 +11,10 @@ def validate_username(username):
 
     invalid_symbols = ''.join(set(re.sub(regex, '', username)))
     if invalid_symbols:
-        raise ValidationError(f'Сharacters errors {invalid_symbols} 'f' in username: "{username}"')
+        raise ValidationError(
+            f'Сharacters errors {invalid_symbols} \
+                'f' in username: "{username}"'
+            )
 
     return username
 

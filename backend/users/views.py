@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from foodgram.common.common_mixins import CreateAndDeleteObjectWithCurrentUserMixin
+from foodgram.common.common_mixins import\
+    CreateAndDeleteObjectWithCurrentUserMixin
 from foodgram.common.common_permissions import IsAuthenticatedOrRaise401
 from recipes.paginators import PageNumberLimitPagination
 from users.models import CustomUser
@@ -13,7 +14,10 @@ from .filters import RecipesLimitFilter
 from .mixins import DisableDjoserUserActionsMixin
 from .permissions import ProfilePermission
 from .serializers import CustomUserSerializerWithRecipes
-from .services import get_authors_user_is_following_with_recipes, add_author_follow, delete_author_follow
+from .services import (
+    get_authors_user_is_following_with_recipes,
+    add_author_follow,
+    delete_author_follow)
 
 
 class CustomUserViewSet(DisableDjoserUserActionsMixin,
@@ -45,11 +49,15 @@ class CustomUserViewSet(DisableDjoserUserActionsMixin,
         if request.user == author:
             errors_ = {'POST': errors.USER_CANT_FOLLOW_HIMSELF,
                        'DELETE': errors.USER_CANT_UNFOLLOW_HIMSELF}
-            return Response(errors_[request.method], status.HTTP_400_BAD_REQUEST)
+            return Response(
+                errors_[request.method],
+                status.HTTP_400_BAD_REQUEST)
 
         if request.method == 'POST':
-            return self.create_with_user(add_author_follow,
-                                         errors.USER_ALREADY_FOLLOWING_TO_THIS_AUTHOR)
+            return self.create_with_user(
+                add_author_follow,
+                errors.USER_ALREADY_FOLLOWING_TO_THIS_AUTHOR)
         else:
-            return self.delete_with_user(delete_author_follow,
-                                         errors.USER_IS_NOT_FOllOWING_TO_THIS_AUTHOR)
+            return self.delete_with_user(
+                delete_author_follow,
+                errors.USER_IS_NOT_FOllOWING_TO_THIS_AUTHOR)

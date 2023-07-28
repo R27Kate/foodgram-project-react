@@ -29,7 +29,8 @@ class RecipeTXTCreator:
         for ingredient_in_recipe in recipe.ingredient_list.all():
             ingredient = ingredient_in_recipe.ingredient
             amount = ingredient_in_recipe.amount
-            ingredients_amount[ingredient] = ingredients_amount.setdefault(ingredient, 0) + amount
+            ingredients_amount[ingredient] = ingredients_amount\
+                .setdefault(ingredient, 0) + amount
 
         return ingredients_amount
 
@@ -38,6 +39,7 @@ class RecipeTXTCreator:
         '''записываем ингредиенты и их количество в файл'''
         file = io.StringIO()
         for ingredient, amount in ingredients_amount.items():
-            file.write(f'{ingredient.name} - {amount} {ingredient.unit_of_measurement}\n')
+            file.write(f'{ingredient.name} - {amount}'
+                       f'{ingredient.unit_of_measurement}\n')
         file.seek(0)
         return file

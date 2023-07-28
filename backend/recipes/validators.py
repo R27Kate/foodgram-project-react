@@ -22,13 +22,14 @@ def validate_tags(value):
         tags_list.append(tag)
     return value
 
+
 def validate_ingredients(ingredients):
     '''Валидация ингредиентов и количества.'''
     if not ingredients:
         raise ValidationError('Ингредиенты не добавлены.')
 
     ingredients_list = []
-    for ingredient in ingredients: 
+    for ingredient in ingredients:
         ingredient_id = ingredient.get('id')
         if ingredient_id in ingredients_list:
             raise ValidationError(

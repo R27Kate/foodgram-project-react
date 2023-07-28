@@ -4,8 +4,8 @@ from rest_framework.response import Response
 
 class CreateAndDeleteObjectWithCurrentUserMixin:
     '''Миксин для добавления и удаления объектов с проверкой
-    текущего пользователя и отправлением сообщения об ошибке 
-    при неудачных операциях'''
+       текущего пользователя и отправлением сообщения об ошибке
+       при неудачных операциях'''
 
     serializer_class_for_objs_with_user = None
 

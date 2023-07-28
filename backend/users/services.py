@@ -1,7 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Prefetch
 
-from foodgram.common.common_services import create_model_instance, delete_model_instance
+from foodgram.common.common_services import (
+    create_model_instance,
+    delete_model_instance)
 from recipes.models import Recipe
 from users.models import Follow
 
