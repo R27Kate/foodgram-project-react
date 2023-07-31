@@ -82,10 +82,9 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
             return self.create_with_user(
                 add_recipe_to_shopping_cart,
                 errors.RECIPE_IS_ALREADY_ON_SHOPPING_CART)
-        else:
-            return self.delete_with_user(
-                delete_recipe_from_shopping_cart,
-                errors.RECIPE_IS_NOT_ON_SHOPPING_CART)
+        return self.delete_with_user(
+            delete_recipe_from_shopping_cart,
+            errors.RECIPE_IS_NOT_ON_SHOPPING_CART)
 
     @action(detail=True, methods=('POST', 'DELETE'), url_path='favorite',
             permission_classes=(IsAuthenticatedOrRaise401,))
@@ -94,8 +93,7 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
         if request.method == 'POST':
             return self.create_with_user(add_recipe_to_favourite,
                                          errors.RECIPE_IS_ALREADY_IN_FAVORITE)
-        else:
-            return self.delete_with_user(delete_recipe_from_favourite,
+        return self.delete_with_user(delete_recipe_from_favourite,
                                          errors.RECIPE_IS_NOT_IN_FAVORITE)
 
     def _save(self, instance=None):
@@ -113,8 +111,7 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
         if self.action not in ('retreive', 'list'):
             return Recipe.objects.all()
 
-        user = self.request.user
-        user_id = user.id if user.is_authenticated else 0
+        user_id = self.request.user.id if self.request.user.is_authenticated else 0
         return get_recipes_for_serialization(user_id)
 
     def get_serializer_class(self):

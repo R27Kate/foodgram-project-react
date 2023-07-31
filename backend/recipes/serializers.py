@@ -5,7 +5,8 @@ from recipes.models import Ingredient, Tag, IngredientInRecipe, Recipe
 from users.serializers import CustomUserSerializer
 from recipes.validators import (
     validate_ingredients,
-    validate_tags)
+    validate_tags,
+    validate_cooking_time)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -80,6 +81,7 @@ class SaveRecipeSerializer(serializers.ModelSerializer):
                                               queryset=Tag.objects.all())
     ingredients = CreateIngredientInRecipeSerializer(many=True)
     image = fields.Base64ImageField()
+    cooking_time = serializers.IntegerField(min_value=1)
 
     class Meta:
         model = Recipe
@@ -90,6 +92,9 @@ class SaveRecipeSerializer(serializers.ModelSerializer):
         validate_tags(self.initial_data.get('tags')),
         validate_ingredients(
             self.initial_data.get('ingredients')
+        )
+        validate_cooking_time(
+            self.initial_data.get('cooking_time')
         )
         return data
 
@@ -127,14 +132,15 @@ class SaveRecipeSerializer(serializers.ModelSerializer):
     @staticmethod
     def _link_ingredients_to_recipe(recipe, ingredients_data):
         '''метод для связи ингредиентов с рецептами'''
+
+        ingredient_relations = []
         for ingredient_data in ingredients_data:
             ingredient = ingredient_data['ingredient']
             amount = ingredient_data['amount']
-            IngredientInRecipe.objects.create(
-                recipe=recipe,
-                ingredient=ingredient,
-                amount=amount
+            ingredient_relations.append(
+                IngredientInRecipe(recipe=recipe, ingredient=ingredient, amount=amount)
             )
+        IngredientInRecipe.objects.bulk_create(ingredient_relations)
 
 
 class RecipePreviewSerializer(serializers.ModelSerializer):

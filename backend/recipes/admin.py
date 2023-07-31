@@ -4,7 +4,6 @@ from .models import (
     Ingredient, IngredientInRecipe, Recipe,
     TagInRecipe, Favourite, ShoppingCart
 )
-# Tag
 
 
 @register(Ingredient)
@@ -12,11 +11,6 @@ class IngredientAdmin(ModelAdmin):
     list_display = ('pk', 'name', 'unit_of_measurement')
     list_filter = ('name',)
     search_fields = ('name',)
-
-
-# @register(Tag)
-# class TagAdmin(ModelAdmin):
-#     list_display = ('pk', 'name', 'color', 'slug')
 
 
 @register(Recipe)

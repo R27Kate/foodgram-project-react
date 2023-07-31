@@ -43,3 +43,11 @@ def validate_ingredients(ingredients):
                 'Количество ингредиентов должно быть больше 1'
             )
     return ingredients
+
+def validate_cooking_time(cooking_time):
+    '''Валидация времени приготовления.'''
+    if int(cooking_time) < 1:
+        raise ValidationError(
+            'Время приготовления должно быть больше 0'
+        )
+    return cooking_time

@@ -45,7 +45,7 @@ class RecipeFilter(FilterSet):
                                             user_condition):
         '''приватный метод для фильтрации по булевому значению
            с учетом пользователя'''
-        user = self.request.user
-        user_id = user.id if user.is_authenticated else 0
+        #user = self.request.user
+        user_id = self.request.user.id if self.request.user.is_authenticated else 0
         method = 'filter' if value else 'exclude'
         return getattr(queryset, method)(**{user_condition: user_id})

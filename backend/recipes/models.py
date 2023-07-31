@@ -1,6 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import  UniqueConstraint
+
+from django.conf import settings
 
 User = get_user_model()
 
@@ -8,18 +11,25 @@ User = get_user_model()
 class Ingredient(models.Model):
     name = models.CharField(
         'Название ингредиента',
-        max_length=200,
+        max_length=settings.INGREDIENT_NAME_MAX_LENGTH,
         db_index=True
     )
     unit_of_measurement = models.CharField(
         verbose_name='Единица измерения',
-        max_length=200
+        max_length=settings\
+            .INGREDIENT_UNIT_OF_MEASUREMENT_MAX_LENGTH
     )
 
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
         ordering = ('name',)
+        constraints = [
+            UniqueConstraint(
+                fields=['name', 'unit_of_measurement'],
+                name='unique_ingredient',
+            ),
+        ]
 
     def __str__(self):
         return f'{self.name}, {self.unit_of_measurement}'
@@ -28,17 +38,17 @@ class Ingredient(models.Model):
 class Tag(models.Model):
     name = models.CharField(
         verbose_name='Название тега',
-        max_length=50,
+        max_length=settings.TAG_NAME_MAX_LENGTH,
         unique=True
     )
     slug = models.SlugField(
         'Уникальный слаг',
-        max_length=200,
+        max_length=settings.TAG_SLUG_MAX_LENGTH,
         unique=True
     )
     color = models.CharField(
         verbose_name='Цвет',
-        max_length=7,
+        max_length=settings.TAG_COLOR_MAX_LENGTH,
         unique=True,
         validators=[
             RegexValidator(
@@ -68,7 +78,7 @@ class Recipe(models.Model):
     )
     name = models.CharField(
         verbose_name='Название рецепта',
-        max_length=200
+        max_length=settings.RECIPE_NAME_MAX_LENGTH
     )
     image = models.ImageField(
         verbose_name='Изображение рецепта',
@@ -164,7 +174,12 @@ class Favourite(models.Model):
     class Meta:
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
-        unique_together = ('recipe', 'user')
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_favourite_recipe',
+            ),
+        ]
 
     def __str__(self):
         return f'{self.user} {self.recipe}'

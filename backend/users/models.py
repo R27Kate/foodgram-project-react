@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -7,26 +8,26 @@ from .validators import validate_username
 class CustomUser(AbstractUser):
     email = models.EmailField(
         verbose_name='Электронная почта',
-        max_length=254,
+        max_length=settings.CUSTOM_USER_EMAIL_MAX_LENGTH,
         unique=True
     )
     username = models.CharField(
         verbose_name='Логин',
-        max_length=150,
+        max_length=settings.CUSTOM_USER_USERNAME_MAX_LENGTH,
         unique=True,
         validators=(validate_username,)
     )
     first_name = models.CharField(
         verbose_name='Имя',
-        max_length=150
+        max_length=settings.CUSTOM_USER_FIRST_NAME_MAX_LENGTH
     )
     last_name = models.CharField(
         verbose_name='Фамилия',
-        max_length=150
+        max_length=settings.CUSTOM_USER_LAST_NAME_MAX_LENGTH
     )
     password = models.CharField(
         verbose_name='Пароль',
-        max_length=150
+        max_length=settings.CUSTOM_USER_PASSWORD_MAX_LENGTH
     )
 
     USERNAME_FIELD = 'email'
@@ -35,7 +36,7 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        ordering = ('id',)
+        ordering = ('last_name', 'first_name')
 
     def __str__(self):
         return self.username
@@ -58,7 +59,6 @@ class Follow(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
-        ordering = ('-pk',)
         unique_together = ('user', 'author')
         constraints = (
             models.CheckConstraint(
