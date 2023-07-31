@@ -94,7 +94,7 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
             return self.create_with_user(add_recipe_to_favourite,
                                          errors.RECIPE_IS_ALREADY_IN_FAVORITE)
         return self.delete_with_user(delete_recipe_from_favourite,
-                                         errors.RECIPE_IS_NOT_IN_FAVORITE)
+                                     errors.RECIPE_IS_NOT_IN_FAVORITE)
 
     def _save(self, instance=None):
         '''вспомогательный метод для сохранения рецепта'''
@@ -111,7 +111,11 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
         if self.action not in ('retreive', 'list'):
             return Recipe.objects.all()
 
-        user_id = self.request.user.id if self.request.user.is_authenticated else 0
+        user_id = (
+            self.request.user.id
+            if self.request.user.is_authenticated
+            else 0
+        )
         return get_recipes_for_serialization(user_id)
 
     def get_serializer_class(self):

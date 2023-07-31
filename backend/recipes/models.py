@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import  UniqueConstraint
+from django.db.models import UniqueConstraint
 
 from django.conf import settings
 
@@ -16,8 +16,7 @@ class Ingredient(models.Model):
     )
     unit_of_measurement = models.CharField(
         verbose_name='Единица измерения',
-        max_length=settings\
-            .INGREDIENT_UNIT_OF_MEASUREMENT_MAX_LENGTH
+        max_length=settings.INGREDIENT_UNIT_OF_MEASUREMENT_MAX_LENGTH
     )
 
     class Meta:

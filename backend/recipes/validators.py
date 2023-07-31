@@ -44,6 +44,7 @@ def validate_ingredients(ingredients):
             )
     return ingredients
 
+
 def validate_cooking_time(cooking_time):
     '''Валидация времени приготовления.'''
     if int(cooking_time) < 1:
