@@ -17,8 +17,8 @@ class IngredientAdmin(ModelAdmin):
 class RecipeAdmin(ModelAdmin):
     list_display = ('pk', 'name', 'author', 'get_favourites',
                     'get_tags', 'created')
-    list_filter = ('author', 'name', 'tags')
-    search_fields = ('name',)
+    list_filter = ('author', 'tags')
+    search_fields = ('name', 'author__username', 'ingredients__name')
 
     def get_favourites(self, obj):
         return obj.favourites.count()
@@ -29,6 +29,11 @@ class RecipeAdmin(ModelAdmin):
         return '\n'.join(obj.tags.values_list('name', flat=True))
 
     get_tags.short_description = 'Тэг или список тэгов'
+
+    def get_ingredients(self, obj):
+        return '\n'.join(obj.ingredients.values_list('name', flat=True))
+
+    get_ingredients.short_description = 'Ингредиент или список ингредиентов'
 
 
 @register(IngredientInRecipe)

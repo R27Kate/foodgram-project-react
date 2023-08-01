@@ -4,12 +4,11 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 
 from foodgram.common.common_mixins import\
     CreateAndDeleteObjectWithCurrentUserMixin
-from foodgram.common.common_permissions import (
-    IsAuthenticatedOrRaise401,
-    IsAuthenticatedOrReadOnlyOrRaise401)
 from recipes import errors
 from recipes.filters import IngredientSearchFilter, RecipeFilter
 from recipes.models import Ingredient, Tag, Recipe
@@ -46,7 +45,7 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
     '''Вьюсет для создания, изменения, просмотра и удаления рецептов'''
     http_method_names = ['get', 'post', 'patch', 'delete']
     queryset = Recipe.objects.select_related('author', 'favourites')
-    permission_classes = (IsAuthenticatedOrReadOnlyOrRaise401,
+    permission_classes = (IsAuthenticatedOrReadOnly,
                           RecipePermission)
     pagination_class = PageNumberLimitPagination
     filter_backends = (DjangoFilterBackend,)
@@ -64,7 +63,7 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
         recipe = self.get_object()
         return Response(self._save(recipe), status.HTTP_200_OK)
 
-    @action(detail=False, permission_classes=(IsAuthenticatedOrRaise401,))
+    @action(detail=False, permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, reqeust):
         '''загружаем список покупок'''
         recipes = get_recipes_from_shopping_cart(reqeust.user)
@@ -75,7 +74,7 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
         return response
 
     @action(detail=True, methods=('POST', 'DELETE'), url_path='shopping_cart',
-            permission_classes=(IsAuthenticatedOrRaise401,))
+            permission_classes=(IsAuthenticated,))
     def process_shopping_cart(self, request, pk=None):
         '''добавляем и удаляем рецепт из списка покупок'''
         if request.method == 'POST':
@@ -87,7 +86,7 @@ class RecipeViewSet(CreateAndDeleteObjectWithCurrentUserMixin,
             errors.RECIPE_IS_NOT_ON_SHOPPING_CART)
 
     @action(detail=True, methods=('POST', 'DELETE'), url_path='favorite',
-            permission_classes=(IsAuthenticatedOrRaise401,))
+            permission_classes=(IsAuthenticated,))
     def process_favorite(self, request, pk=None):
         '''добавляем и удаляем рецепт в избранном'''
         if request.method == 'POST':

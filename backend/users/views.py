@@ -3,10 +3,10 @@ from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from foodgram.common.common_mixins import\
     CreateAndDeleteObjectWithCurrentUserMixin
-from foodgram.common.common_permissions import IsAuthenticatedOrRaise401
 from recipes.paginators import PageNumberLimitPagination
 from users.models import CustomUser
 from . import errors
@@ -33,7 +33,7 @@ class CustomUserViewSet(DisableDjoserUserActionsMixin,
 
     @action(detail=False, methods=('GET',), url_path='subscriptions',
             serializer_class=CustomUserSerializerWithRecipes,
-            permission_classes=(IsAuthenticatedOrRaise401,))
+            permission_classes=(IsAuthenticatedOrReadOnly,))
     def get_subscriptions(self, request):
         '''получение авторов, на которых подписан текущий пользователь'''
         authors = get_authors_user_is_following_with_recipes(request.user)

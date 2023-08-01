@@ -1,8 +1,8 @@
-from rest_framework.permissions import BasePermission
-
-from foodgram.common.common_permissions import (
-    IsAuthenticatedOrRaise401,
-    IsAuthenticatedOrReadOnlyOrRaise401)
+from rest_framework.permissions import (
+    BasePermission,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly
+)
 
 
 class ProfilePermission(BasePermission):
@@ -10,10 +10,10 @@ class ProfilePermission(BasePermission):
        к профилю пользователя'''
     def has_permission(self, request, view):
         if view.action in ('me', 'set_password'):
-            return IsAuthenticatedOrRaise401().has_permission(
+            return IsAuthenticated().has_permission(
                 request,
                 view)
 
-        return IsAuthenticatedOrReadOnlyOrRaise401().has_permission(
+        return IsAuthenticatedOrReadOnly().has_permission(
             request,
             view)

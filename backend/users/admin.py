@@ -11,7 +11,6 @@ class MyUserAdmin(UserAdmin):
                     'first_name', 'last_name',
                     'is_staff', 'date_joined')
     search_fields = ('username', 'first_name', 'last_name', 'email')
-    list_filter = ('username', 'email', 'first_name', 'last_name')
     empty_value_display = '-empty-'
 
 
@@ -19,4 +18,3 @@ class MyUserAdmin(UserAdmin):
 class FollowAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'author')
     search_fields = ('user', 'author')
-    list_filter = ('user', 'author')
