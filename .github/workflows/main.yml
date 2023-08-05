@@ -32,7 +32,7 @@ jobs:
         python -m pip install --upgrade pip 
         pip install flake8==6.0.0 flake8-isort==6.0.0
         pip install -r ./backend/requirements.txt
-    - name: Test with flake8 and django tests
+    - name: Test with flake8
       env:
         POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
         POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
@@ -147,12 +147,12 @@ jobs:
           sudo docker compose -f docker-compose.yml exec backend python manage.py upload_tags
           sudo docker system prune --all --force
 
-  send_message_on_push_to_main:
+  send_message_on_push_to_master:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     needs: deploy
     steps:
-      - name: Send message on push to main branch
+      - name: Send message on push to master branch
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}

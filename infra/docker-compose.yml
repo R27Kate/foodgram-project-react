@@ -28,7 +28,7 @@ services:
 
   frontend:
     env_file: .env
-    build: r27kate/foodgram_frontend
+    image: r27kate/foodgram_frontend
     volumes:
        - ../frontend:/app/result_build/
     depends_on:
