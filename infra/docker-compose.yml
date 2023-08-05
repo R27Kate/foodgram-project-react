@@ -19,8 +19,8 @@ services:
     restart: always
     env_file: .env
     volumes:
-       - data:/app/data
-       - static:/backend_static/
+       - data:/app/data/
+       - static:/app/static/
        - media:/app/media/
 
     depends_on:
@@ -29,6 +29,7 @@ services:
   frontend:
     env_file: .env
     image: r27kate/foodgram_frontend
+    command: cp -r /app/build/. /frontend_static/
     volumes:
        - static:/frontend_static
     depends_on:
@@ -45,7 +46,7 @@ services:
        #- ../docs:/usr/share/nginx/html/api/docs
        - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
        - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
-       - static:/static/
+       - static:/app/static/
        - media:/app/media/
 
      depends_on:
