@@ -2,7 +2,7 @@ from django.contrib.admin import ModelAdmin, register
 
 from .models import (
     Ingredient, IngredientInRecipe, Recipe,
-    TagInRecipe, Favourite, ShoppingCart, Tag
+    Favourite, ShoppingCart, Tag
 )
 
 
@@ -44,11 +44,6 @@ class RecipeAdmin(ModelAdmin):
 @register(IngredientInRecipe)
 class IngredientInRecipe(ModelAdmin):
     list_display = ('pk', 'recipe', 'ingredient', 'amount')
-
-
-@register(TagInRecipe)
-class TagAdmin(ModelAdmin):
-    list_display = ('pk', 'tag', 'recipe')
 
 
 @register(Favourite)
