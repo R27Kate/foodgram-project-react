@@ -1,0 +1,44 @@
+version: '3.3'
+
+volumes:
+  pg_data:
+  static:
+  media:
+
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+
+  backend:
+    image: r27kate/foodgram_backend
+    env_file: .env
+    volumes:
+       - static:/backend_static/
+       - media:/app/media/
+
+    depends_on:
+      - db
+
+  frontend:
+    env_file: .env
+    image: r27kate/foodgram_frontend
+    command: cp -r /app/build/. /frontend_static/
+    volumes:
+       - static:/frontend_static
+
+  nginx:
+     image: r27kate/foodgram_gateway
+     env_file: .env
+     volumes:
+       - ./docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
+       - ./docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
+       - static:/static/
+       - media:/app/media/
+     ports:
+       - "9000:80"
+     depends_on:
+      - db
